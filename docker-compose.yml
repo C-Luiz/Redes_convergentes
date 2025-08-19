@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  kamailio:
+    build: .
+    container_name: kamailio
+    depends_on:
+      - mosquitto
+    ports:
+      - "5060:5060/udp"
+      - "5060:5060/tcp"
+    networks:
+      - sipnet
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      - sipnet
+
+networks:
+  sipnet:
+    driver: bridge
+
